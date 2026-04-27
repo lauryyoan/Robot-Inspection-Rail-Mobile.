@@ -5,7 +5,7 @@ Présentation du Projet
 ​Le système est conçu pour être démontable, transportable et capable de fonctionner aussi bien en laboratoire qu'en plein champ. Il permet de surveiller l'état de santé des plantes sans intervention humaine constante.
 
 Architecture Technique
-​Le projet est divisé en deux sous-systèmes interdépendants qui communiquent par liaison série :
+​Le projet est divisé en deux sous-systèmes interdépendants qui communiquent par liaison série:
 
 ​Sous-projet 1 : Mécanique & Commande
 ​Structure : Rail de guidage et chariot mobile.
