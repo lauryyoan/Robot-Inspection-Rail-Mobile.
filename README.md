@@ -6,11 +6,13 @@ Présentation du Projet
 
 Architecture Technique
 ​Le projet est divisé en deux sous-systèmes interdépendants qui communiquent par liaison série :
+
 ​Sous-projet 1 : Mécanique & Commande
 ​Structure : Rail de guidage et chariot mobile.
 ​Motorisation : Système de déplacement sur deux axes (Axe X pour la translation, Axe Z pour le positionnement vertical des capteurs).
 ​Contrôle : Pilotage des moteurs pas-à-pas via microcontrôleur.
 ​Énergie : Système embarqué avec gestion de l'autonomie pour les tests au champ.
+
 ​Sous-projet 2 : Imagerie & Indicateurs
 ​Unité de traitement : Calculateur embarqué pour la gestion des capteurs.
 ​Capteurs : Imagerie RGB pour le calcul de l'indice de verdeur (ExG), thermométrie infrarouge pour la température foliaire et mesure de l'humidité environnementale.
