@@ -24,9 +24,13 @@ Architecture Technique
 ​Capteurs : Imagerie RGB pour le calcul de l'indice de verdeur (ExG), thermométrie infrarouge pour la température foliaire et mesure de l'humidité environnementale.
 
 Plan de Travail (12 semaines)
+
 ​Phase 1 (2 sem.) : Conception, définition des protocoles de communication et schémas de principe.
+
 ​Phase 2 (3 sem.) : Approvisionnement des composants et assemblage de la structure.
+
 ​Phase 3 (4 sem.) : Développement logiciel (Scripts d'acquisition et contrôle moteur) et tests unitaires.
+
 ​Phase 4 (3 sem.) : Intégration globale, campagnes de mesures et rédaction du rapport final.
 ​
 Équipe du Projet (Binôme)
