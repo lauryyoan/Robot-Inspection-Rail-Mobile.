@@ -1,0 +1,6 @@
+# Dépendances de développement (PC/sandbox)
+# Sur Raspberry Pi, PRÉFÉRER les paquets système (plus légers sur Pi 2B) :
+#   sudo apt install python3-opencv python3-numpy python3-matplotlib
+numpy
+opencv-python-headless
+matplotlib

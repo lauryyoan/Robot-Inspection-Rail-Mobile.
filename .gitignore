@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Sorties générées par le pipeline (images de debug, CSV)
+sorties/
