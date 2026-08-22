@@ -1,24 +1,25 @@
 /*
  * =====================================================================
  *  RECEPTEUR ESP-NOW — ESP32-C3 SuperMini (installe sur le robot)
- *  Role : recoit les trames humidite du champ et les imprime en JSON
- *         sur l'UART1 vers le Raspberry Pi.
+ *  Role : recoit les trames JSON diffusees et les transmet TELLES
+ *         QUELLES au Raspberry Pi sur l'UART1 (aucun decodage ici :
+ *         le Pi parse le JSON — moins de code, moins de bugs).
  *
  *  CABLAGE C3 SuperMini  ->  Raspberry Pi 2B :
  *      GPIO 5 (TX)  ----> GPIO 15 (RXD du Pi)
- *      GPIO 4 (RX)  ----> GPIO 14 (TXD du Pi)   [optionnel, pour plus tard]
+ *      GPIO 4 (RX)  ----> GPIO 14 (TXD du Pi)   [optionnel]
  *      GND          ----> GND                    (OBLIGATOIRE, commun !)
  *      5V           ----> 5V du Pi               (alimente le C3)
  *
  *  Cote Pi : sudo raspi-config -> Interfaces -> Serial
  *      -> login shell sur serie : NON  /  port serie materiel : OUI
- *      -> le C3 apparait sur /dev/serial0 (115200 bauds)
+ *      -> le C3 parle sur /dev/serial0 (115200 bauds)
  *
- *  Sortie vers le Pi (une ligne JSON par trame recue) :
- *      {"h": 62.5, "brut": 1830}
+ *  Sortie vers le Pi (recopie de la trame recue) :
+ *      {"id":"SOL-A","h":62.5,"brut":1830,"mac":"AA:BB:..."}
  *
- *  Remarque : ESP-NOW est compatible entre ESP32 classique (DevKit)
- *  et ESP32-C3. Les deux sont regles sur le canal 1.
+ *  Compatibilite : ESP-NOW fonctionne entre ESP32 classique (DevKit,
+ *  emetteur) et ESP32-C3 — les deux regles sur le canal 1.
  * =====================================================================
  */
 
@@ -26,39 +27,29 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 
-#define LED             8     // LED integree du C3 SuperMini
-#define CANAL           1     // meme canal que l'emetteur
-#define MAGIC           0x534F4C31UL
+#define LED     8     // LED integree du C3 SuperMini
+#define CANAL   1     // meme canal que l'emetteur
 
 // UART1 : GPIO4 = RX (recoit du Pi), GPIO5 = TX (envoie au Pi)
 HardwareSerial SerialPi(1);
 
-typedef struct __attribute__((packed)) {
-  uint32_t magic;
-  uint8_t  id_capteur;
-  float    humidite;
-  float    brut;
-} TrameSol;
-
 // Callback de reception — signature du core ESP32 v3.x
-// (avec un core 2.x, remplacer par :
-//  void a_la_reception(const uint8_t *mac, const uint8_t *data, int len)
-//  et supprimer le parametre info)
+// (core 2.x : void a_la_reception(const uint8_t *mac, const uint8_t *data, int len)
+//  — supprimer le parametre info et utiliser mac)
 void a_la_reception(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
-  if (len != sizeof(TrameSol)) return;          // trame inattendue
-  TrameSol t;
-  memcpy(&t, data, sizeof(t));
-  if (t.magic != MAGIC) return;                 // bruit radio
+  if (len <= 1 || data[0] != '{') return;      // trame inattendue (non JSON)
 
-  // Une ligne JSON, lue par CapteurHumiditeUART (src/materiel.py)
-  SerialPi.printf("{\"h\":%.1f,\"brut\":%.0f}\n", t.humidite, t.brut);
+  // Transmission telle quelle vers le Pi + fin de ligne
+  SerialPi.write(data, len);
+  SerialPi.write('\n');
+  SerialPi.flush();
 
-  // Acknowledge visuel + debug sur le port USB
+  // Acknowledge visuel + debug USB avec la source
   digitalWrite(LED, HIGH);
-  Serial.printf("Recu de %02X:%02X:%02X:%02X:%02X:%02X  h=%.1f%%  brut=%.0f\n",
+  Serial.printf("[%02X:%02X:%02X:%02X:%02X:%02X] %s\n",
                 info->src_addr[0], info->src_addr[1], info->src_addr[2],
                 info->src_addr[3], info->src_addr[4], info->src_addr[5],
-                t.humidite, t.brut);
+                (const char *)data);
   delay(30);
   digitalWrite(LED, LOW);
 }
@@ -72,7 +63,7 @@ void setup() {
 
   WiFi.mode(WIFI_STA);
   esp_wifi_set_channel(CANAL, WIFI_SECOND_CHAN_NONE);
-  Serial.println("Recepteur ESP-NOW pret (canal 1)");
+  Serial.println("Recepteur ESP-NOW pret (canal 1, diffusion)");
 
   if (esp_now_init() != ESP_OK) {
     Serial.println("ERREUR esp_now_init");
