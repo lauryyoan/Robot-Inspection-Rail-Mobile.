@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="d4e5f6a7b8c9d0e1"]
+
+[ext_resource type="Script" path="res://scripts/combat/enemy_stickman.gd" uid="2b3c4d5e6f7a8b9c"]
+
+[node name="EnemyStickman" type="CharacterBody3D"]
+script = ExtResource(1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyStickman"]
+shape = SubResource(1)
+
+[sub_resource type="CapsuleShape3D" id="1"]
+radius = 0.25
+height = 1.8

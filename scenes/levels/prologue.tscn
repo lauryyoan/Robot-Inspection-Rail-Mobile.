@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3]
+
+[node name="Prologue" type="Node3D"]
+
+[node name="SpawnPoint" type="Marker3D" parent="Prologue"]
+position = Vector3(0, 1, 0)
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Prologue"]
+rotation_degrees = Vector3(45, -45, 0)
+energy = 1.0
+
+[node name="Sol" type="StaticBody3D" parent="Prologue"]
+[node name="CollisionShape" type="CollisionShape3D" parent="Sol"]
+shape = SubResource("1")
+
+[node name="DialogueUI" type="CanvasLayer" parent="Prologue"]
+[node name="DialogueLabel" type="Label" parent="Prologue/DialogueUI"]
+text = ""
+anchors_preset = 15  # CENTER
+offset_left = -200
+offset_top = -100
+offset_right = 200
+offset_bottom = 100
+autowrap = true
+visible = false
+
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(100, 1, 100)

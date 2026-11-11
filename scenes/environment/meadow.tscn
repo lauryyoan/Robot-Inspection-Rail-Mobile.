@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/environment/meadow.gd" id="1"]
+
+[node name="Meadow" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Sol" type="StaticBody3D" parent="Meadow"]
+[node name="CollisionShape" type="CollisionShape3D" parent="Sol/CollisionShape"]
+shape = SubResource("1")
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Meadow"]
+rotation_degrees = Vector3(45, -45, 0)
+energy = 1.0
+
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(200, 1, 200)

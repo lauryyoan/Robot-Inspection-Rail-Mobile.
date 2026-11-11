@@ -1,0 +1,31 @@
+; Project settings — SHADOWS OF FATE (Godot 4.x)
+; Action-RPG stickman 3D en monde ouvert, cible Android.
+
+[config]
+name = "Shadows of Fate"
+version = "4.3.0"
+
+[application]
+config/name = "Shadows of Fate"
+config/version = "0.1.0"
+run/main_scene = "res://scenes/levels/prologue.tscn"
+
+[autoload]
+GameManager = "res://scripts/game_manager.gd"
+CombatManager = "res://scenes/combat/combat_manager.tscn"
+
+[display]
+window/width = 1280
+window/height = 720
+window/resizable = true
+window/vsync/vsync_mode = 1
+window/per_pixel_transparency_enabled = false
+
+[rendering]
+renderer/rendering_method = "gl_compatibility"
+renderer/default_texture_filter = "linear"
+
+[input]
+joystick_deadzone = 0.15
+
+[android]
